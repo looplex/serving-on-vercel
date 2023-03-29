@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { useMemo } from 'react'
 
 import Clock from '../../components/Clock.js'
 
@@ -12,7 +13,7 @@ export async function getStaticPaths () {
       { params: { slug: 'lorem-ipsum' } },
       { params: { slug: 'foobar' } }
     ],
-    fallback: false// NOTE: using fallback false here is what makes next.js similar to hugo, gatsby, jekyll and others.
+    fallback: false // NOTE: using fallback false here is what makes next.js similar to hugo, gatsby, jekyll and others.
   }
 }
 
@@ -21,7 +22,8 @@ export async function getStaticProps (context) {
   // NOTE: on SSG, `getStaticProps` may fetch file data, database records or call external APIs to populate content.
   // IMPORTANT: DO NOT use `fetch()` to call an internal API.
   return {
-    props: { // <PageComponent {...attributes} />{children}</PageComponent>
+    props: {
+      // <PageComponent {...attributes} />{children}</PageComponent>
       now: Date.now(),
       slug: context.params.slug
     }
@@ -30,7 +32,7 @@ export async function getStaticProps (context) {
 
 function SsgPage (props) {
   // NOTE: also, on SSG, data fetching for hydration happens here.
-  const dttm = new Date(props.now)
+  const dttm = useMemo(() => new Date(props.now), [props.now])
   return (
     <main>
       <Head>
@@ -38,8 +40,26 @@ function SsgPage (props) {
       </Head>
       <h1>SSG Page</h1>
       <p>
-        Hi! I am a <code>Static Site Generated</code> Page born in <mark><time dateTime={dttm.toISOString()}>{dttm.toLocaleString()}</time></mark>, but it&apos;s <mark><Clock /></mark> now.<br />
-        and my slug is: <code>{props.slug}</code>. Feel free to visit my siblings <Link href='/ssg/foobar'><a>foobar</a></Link> and <Link href='/ssg/undefined'><a>undefined</a></Link> to understand more about <code>SSG</code> pages.
+        Hi! I am a <code>Static Site Generated</code> Page born in{' '}
+        <mark>
+          <time dateTime={dttm.toISOString()}>{dttm.toLocaleString()}</time>
+        </mark>
+        , but it&apos;s{' '}
+        <mark>
+          <Clock />
+        </mark>{' '}
+        now.
+        <br />
+        and my slug is: <code>{props.slug}</code>. Feel free to visit my
+        siblings{' '}
+        <Link href='/ssg/foobar'>
+          <a>foobar</a>
+        </Link>{' '}
+        and{' '}
+        <Link href='/ssg/undefined'>
+          <a>undefined</a>
+        </Link>{' '}
+        to understand more about <code>SSG</code> pages.
       </p>
     </main>
   )
