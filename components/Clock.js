@@ -10,7 +10,7 @@ function Clock (props) {
     return () => {
       clearInterval(timerId)
     }
-  }, [])
+  }, [tick])
   return <time dateTime={date.toISOString()}>{date.toLocaleString()}</time>
 }
 
