@@ -34,6 +34,7 @@ export async function getStaticProps (context) {
 }
 
 function IsgPage (props) {
+  const dttm = useMemo(() => new Date(props.now), [props.now])
   const router = useRouter()
 
   // NOTE: with `fallback: true`, you can optimize TTFB and UX returning a loading interface here.
@@ -48,8 +49,6 @@ function IsgPage (props) {
       </main>
     )
 
-  // NOTE: and after that, go fetch data for hydration.
-  const dttm = useMemo(() => new Date(props.now), [props.now])
   return (
     <main>
       <Head>
